@@ -1,26 +1,46 @@
+import glob
 import pandas as pd
 import numpy as np
+import seaborn as sns
 import matplotlib.pyplot as plt
 
-data = pd.read_csv("data/shelter-2019.csv", index_col = 0)
+def PreparePlotData(dataPath):
+    data = pd.read_csv(dataPath, index_col = 0).fillna(0)
+    occupied, capacity = {}, {}
+    # Group data based on occupancy date
+    for index, row in data.iterrows():
+        occupied[row.OCCUPANCY_DATE] = occupied.get(row.OCCUPANCY_DATE, 0) + row.OCCUPANCY
+        capacity[row.OCCUPANCY_DATE] = capacity.get(row.OCCUPANCY_DATE, 0) + row.CAPACITY
+    
+    # Sort the dates to be in proper order
+    days = sorted(data.OCCUPANCY_DATE.unique())
 
-# Set up the graph
-barWidth = 0.25
+    return [occupied[day] for day in days], [capacity[day] - occupied[day] for day in days], [day[:10] for day in days]
 
-# Load the two bars with their respective data
-occupied = data["OCCUPANCY"][:100]
-capacity = data["CAPACITY"][:100]
 
-# Pos
-r1 = np.arange(len(occupied))
-r2 = [barWidth+ x for x in r1]
 
-# Make the graph
-plt.bar(r1, occupied, color='#7f6d5f', width=barWidth, edgecolor='white', label='Occupied')
-plt.bar(r2, capacity, color='#557f2d', width=barWidth, edgecolor='white', label='Avaliable')
+def CreatedStackPlot(occupied, capacity, labels):
+    # Axis data
+    x = labels
+    y = [occupied, capacity]
+    # use a known color palette (see..)
+    pal = sns.color_palette("Set1")
+    plt.stackplot(x,y, labels=['Occupied', 'Avaliable'], colors=pal, alpha=0.7)
+    plt.legend(loc='lower right')
+    plt.margins(0,0)
+    plt.title('Shelter Occupied vs Avaliable')
+    # plt.show()
+    plt.savefig("Shelter-{}.png".format(labels[0][:4]))
+    plt.clf()
 
-# Show
-plt.legend()
-plt.show()
 
-print(occupied)
+def GenerateAllPlots():
+    paths = glob.glob("data/*.csv")
+    for path in paths:
+        print(path)
+        occupied, capacity, labels = PreparePlotData(path)
+        if len(occupied):
+            CreatedStackPlot(occupied, capacity, labels)
+    #print(occupied, capacity, len)
+    
+GenerateAllPlots()
