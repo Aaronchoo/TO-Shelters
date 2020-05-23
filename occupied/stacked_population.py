@@ -4,8 +4,8 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-def PreparePlotData(dataPath):
-    data = pd.read_csv(dataPath, index_col = 0).fillna(0)
+def PreparePlotData(data_path):
+    data = pd.read_csv(data_path, index_col = 0).fillna(0)
     occupied, capacity = {}, {}
     # Group data based on occupancy date
     for index, row in data.iterrows():
@@ -18,8 +18,8 @@ def PreparePlotData(dataPath):
 
 def CreatedStackPlot(occupied, capacity, labels, year):
     # Axis data and removes the year from label
-    x = [label[5:] for label in labels] 
-    y = [occupiedCreatedStackPlot, capacity]
+    x = labels
+    y = [occupied, capacity]
 
     # Set up graph data
     pal = sns.color_palette("Set1")
