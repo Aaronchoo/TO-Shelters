@@ -76,8 +76,7 @@ def GenerateChoroplethMaps():
         PrepareMapData(path, path[-8:-4])
         # Call Create Choropleth Map
         CreateChoroplethMap(neighbourhood_geo, path[-8:-4])
-        break
-    
+        
 def CleanNeighbourhood():
     # Create location column for each shelter
     global path_to_data
