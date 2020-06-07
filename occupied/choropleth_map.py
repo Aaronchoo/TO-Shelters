@@ -9,10 +9,10 @@ path_to_data = "../data"
 postal_to_neighbourhood = {}
 neighbourhoods = []
 
-def PrepareMapData(dataPath, year):
+def prepare_map_data(data_path, year):
     global postal_to_neighbourhood, path_to_data, neighbourhoods
     # Need to calculate average density per year and later group up the locations
-    plot_data = pd.read_csv(dataPath, index_col = 0).fillna(0)
+    plot_data = pd.read_csv(data_path, index_col = 0).fillna(0)
     occupied = {}
 
     # Group data and swap in shelter data
@@ -29,7 +29,7 @@ def PrepareMapData(dataPath, year):
             neighbourhood_writer.writerow([neighbourhood, occupied.get(neighbourhood, 0)/365])
     
 
-def CreateChoroplethMap(neighbourhood_geo, year):
+def create_choropleth_map(neighbourhood_geo, year):
     global path_to_data
     # Get neighbourhood density data
     with open("{}/neighbourhood-average-{}.csv".format(path_to_data, year)) as f:
@@ -53,9 +53,9 @@ def CreateChoroplethMap(neighbourhood_geo, year):
     folium.LayerControl().add_to(m)
 
     # Save to html
-    m.save('#Neighbourhood_Shetlers-{}.html'.format(year))
+    m.save('../plots/#Neighbourhood_Shetlers-{}.html'.format(year))
 
-def GenerateChoroplethMaps():
+def generate_choropleth_maps():
     global postal_to_neighbourhood, path_to_data, neighbourhoods
     # Load postal and neighbourhood data
     locations_data = pd.read_csv("{}/locations.csv".format(path_to_data))
@@ -73,11 +73,11 @@ def GenerateChoroplethMaps():
 
     paths = glob.glob("{}/shelter-*.csv".format(path_to_data))
     for path in paths:
-        PrepareMapData(path, path[-8:-4])
+        prepare_map_data(path, path[-8:-4])
         # Call Create Choropleth Map
-        CreateChoroplethMap(neighbourhood_geo, path[-8:-4])
+        create_choropleth_map(neighbourhood_geo, path[-8:-4])
         
-def CleanNeighbourhood():
+def clean_neighbourhood():
     # Create location column for each shelter
     global path_to_data
     neighbourhood_file = "{}/Neighbourhoods.geojson".format(path_to_data)
@@ -92,4 +92,4 @@ def CleanNeighbourhood():
         f.write(json.dumps(neighbourhood_data))
 
 if __name__ == "__main__":
-   GenerateChoroplethMaps()
+   generate_choropleth_maps()
