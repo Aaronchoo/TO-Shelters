@@ -29,14 +29,14 @@ def create_stack_plot(occupied, capacity, labels, year):
     plt.title('Shelter Occupied vs Avaliable')
 
     # Save the graph (can use plt.show() to display graph instead)
-    plt.savefig("../plots/Shelter-{}.pdf".format(year))
+    plt.savefig("./plots/Shelter-{}.pdf".format(year))
     
     # Clear all configurations
     plt.clf()
 
 
 def generate_stack_plots():
-    paths = glob.glob("../data/shelter-*.csv")
+    paths = glob.glob("./data/shelter-*.csv")
     for path in paths:
         occupied, capacity, labels = prepare_plot_data(path)
         if len(occupied):

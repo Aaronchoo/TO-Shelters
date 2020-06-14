@@ -5,7 +5,7 @@ import folium
 import csv
 import glob
 
-path_to_data = "../data"
+path_to_data = "./data"
 postal_to_neighbourhood = {}
 neighbourhoods = []
 
@@ -53,7 +53,7 @@ def create_choropleth_map(neighbourhood_geo, year):
     folium.LayerControl().add_to(m)
 
     # Save to html
-    m.save('../plots/#Neighbourhood_Shetlers-{}.html'.format(year))
+    m.save('./plots/#Neighbourhood_Shetlers-{}.html'.format(year))
 
 def generate_choropleth_maps():
     global postal_to_neighbourhood, path_to_data, neighbourhoods

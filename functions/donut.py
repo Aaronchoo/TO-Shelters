@@ -36,14 +36,14 @@ def create_donut(types, weighting, weighted_on, year):
     p.gca().add_artist(my_circle)
     plt.title("Daily shelter sectors based on total {} counted in {}".format(weighted_on, year))
     # Save the donut (can use plt.show() to display graph instead)
-    plt.savefig("../plots/Sectors-donut-{}-{}.pdf".format(weighted_on, year))
+    plt.savefig("./plots/Sectors-donut-{}-{}.pdf".format(weighted_on, year))
     
     # Clear all configurations
     plt.clf()
 
 
 def donut_make_plots():
-    paths = glob.glob("../data/shelter-*.csv")
+    paths = glob.glob("./data/shelter-*.csv")
     for path in paths:
         types, shelter_count, sum_occupancy, sum_capacity = prepare_donut_ingredients(path)
         if len(shelter_count):
